@@ -1,0 +1,9 @@
+*.suo
+*.sdf
+*.filters
+*.user
+*.opensdf
+*.ipch
+.vs/
+TECControl/bin
+TECControl/obj
