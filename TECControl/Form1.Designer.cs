@@ -35,6 +35,7 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.RefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.lstPorts = new System.Windows.Forms.ComboBox();
             this.cmdRefreshPorts = new System.Windows.Forms.Button();
@@ -147,7 +148,7 @@
             // sliderColdTemp
             // 
             this.sliderColdTemp.Location = new System.Drawing.Point(12, 69);
-            this.sliderColdTemp.Maximum = 25;
+            this.sliderColdTemp.Maximum = 35;
             this.sliderColdTemp.Minimum = -5;
             this.sliderColdTemp.Name = "sliderColdTemp";
             this.sliderColdTemp.Size = new System.Drawing.Size(324, 45);
@@ -466,6 +467,7 @@
             this.Controls.Add(this.cmdRefreshPorts);
             this.Controls.Add(this.lstPorts);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "TEC Control";

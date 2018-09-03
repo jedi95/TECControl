@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using rtChart;
@@ -19,6 +12,7 @@ namespace TECControl
         Config config;
         kayChart pwmChart;
         kayChart coldChart;
+        bool firstUpdate = false;
         public delegate int AddString(string message);
 
         public frmMain()
@@ -29,8 +23,22 @@ namespace TECControl
         private void Form1_Load(object sender, EventArgs e)
         {
             refreshPorts();
+            if (lstPorts.Items.Count == 1)
+            {
+                lstPorts.SelectedIndex = 0;
+            }
             pwmChart = new kayChart(chartPWM, 60);
             coldChart = new kayChart(chartCold, 60);
+
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == NativeMethods.WM_SHOWME)
+            {
+                ShowMe();
+            }
+            base.WndProc(ref m);
         }
 
         private void refreshPorts()
@@ -56,6 +64,7 @@ namespace TECControl
             {
                 _port = new SerialPort(lstPorts.Text);
                 _port.Open();
+                firstUpdate = true;
                 RefreshTimer.Enabled = true;
                 RefreshTimer.Start();
             }
@@ -94,6 +103,16 @@ namespace TECControl
                 txtActualTarget.Text = status._actualTarget.ToString() + "°C";
                 pwmChart.TriggeredUpdate(status._PWM);
                 coldChart.TriggeredUpdate(status._tCold);
+
+                if (firstUpdate)
+                {
+                    sliderColdTemp.Value = status._targetTemperature;
+                    sliderDewPointOffset.Value = status._dewPointOffset;
+                    chkEnableSafety.Checked = status._enableDewPointSafety;
+                    lblCoolantSlider.Text = sliderColdTemp.Value.ToString() + " C";
+                    lblDewPointOffsetSlider.Text = sliderDewPointOffset.Value.ToString() + " C";
+                    firstUpdate = false;
+                }
 
                 if (_port != null && _port.IsOpen)
                 {
@@ -176,6 +195,20 @@ namespace TECControl
                 _port.Close();
             }
             this.Close();
+        }
+
+        private void ShowMe()
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                WindowState = FormWindowState.Normal;
+            }
+            // get our current "TopMost" value (ours will always be false though)
+            bool top = TopMost;
+            // make our form jump to the top of everything
+            TopMost = true;
+            // set it back to whatever it was
+            TopMost = top;
         }
     }
 }
